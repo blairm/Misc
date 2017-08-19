@@ -1,0 +1,6 @@
+PlaylistGenerator/Music/*
+PlaylistGenerator/Playlists/*
+PlaylistGenerator/PlaylistGenerator/AlbumList/build
+PlaylistGenerator/PlaylistGenerator/Playlist/build
+*.sublime-workspace
+*.lnk
