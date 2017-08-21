@@ -1,4 +1,4 @@
-Generates playlists for Vauxhall Astra J (navi 600)
+Generates playlists for Vauxhall Astra J (navi 650)
 
 # Music Folder Structure
 
