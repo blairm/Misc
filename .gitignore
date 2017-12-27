@@ -20,3 +20,4 @@ WebServiceTest/WCF/webservicecaller/webservicecaller.CSharp.csproj
 WebServiceTest/WCF/webservice/bin
 WebServiceTest/WCF/webservice/obj
 SortExamples/build
+KDTree/build
