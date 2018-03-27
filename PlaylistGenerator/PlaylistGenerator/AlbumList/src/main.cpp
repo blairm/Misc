@@ -30,7 +30,14 @@ For more information, please refer to <http://unlicense.org>
 #include <string>
 #include <vector>
 
+
+#define ARRAY_COUNT( array ) sizeof( ( array ) ) / sizeof( ( array )[ 0 ] )
+
+
+char tags[] = { '*', '-' };
+
 std::string MUSIC_FOLDER = "..\\..\\..\\Music\\";
+
 
 int main( int argc, char** argv )
 {
@@ -55,7 +62,15 @@ int main( int argc, char** argv )
 				{
 					std::string line;
 					while( std::getline( inStream, line ) )
+					{
+						for( int i = 0; i < ARRAY_COUNT( tags ); ++i )
+						{
+							if( line.back() == tags[ i ] )
+								line.pop_back();
+						}
+
 						albumName.push_back( line );
+					}
 				}
 
 				WIN32_FIND_DATA albumFindData;

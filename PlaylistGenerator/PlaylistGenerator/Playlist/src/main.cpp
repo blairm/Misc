@@ -30,10 +30,14 @@ For more information, please refer to <http://unlicense.org>
 #include <string>
 #include <vector>
 
-std::string TOPLEVEL_FOLDER = "..\\..\\..\\";
-std::string MUSIC_FOLDER = TOPLEVEL_FOLDER + "Music\\";
-std::string PLAYLIST_FOLDER = TOPLEVEL_FOLDER + "Playlists\\";
-std::string PLAYLIST_TO_MUSIC_FOLDER = "..\\Music\\";
+
+char tagIgnoreDuplicates				= '*';
+char tagIgnoreAlbum						= '-';
+
+std::string TOPLEVEL_FOLDER				= "..\\..\\..\\";
+std::string MUSIC_FOLDER				= TOPLEVEL_FOLDER + "Music\\";
+std::string PLAYLIST_FOLDER				= TOPLEVEL_FOLDER + "Playlists\\";
+std::string PLAYLIST_TO_MUSIC_FOLDER	= "..\\Music\\";
 
 char toLower( char param )
 {
@@ -189,6 +193,16 @@ int main( int argc, char** argv )
 			std::string albumName;
 			while( std::getline( inStream, albumName ) )
 			{
+				if( albumName.back() == tagIgnoreAlbum )
+					continue;
+
+				bool includeDuplicates = false;
+				if( albumName.back() == tagIgnoreDuplicates )
+				{
+					includeDuplicates = true;
+					albumName.pop_back();
+				}
+
 				WIN32_FIND_DATA songFindData;
 				HANDLE songHandle = FindFirstFile( ( MUSIC_FOLDER + artistList[ i ] + "\\" + albumName + "\\*.mp3" ).c_str(), &songFindData );
 				if( songHandle != INVALID_HANDLE_VALUE )
@@ -201,12 +215,16 @@ int main( int argc, char** argv )
 						std::size_t songStart = songName.find(" ") + 1;
 
 						bool found = false;
-						for( int j = 0; j < songList.size(); ++j )
+
+						if( !includeDuplicates )
 						{
-							if( songName.substr( songStart ) == songList[ j ].substr( songStart ) )
+							for( int j = 0; j < songList.size(); ++j )
 							{
-								found = true;
-								break;
+								if( songName.substr( songStart ) == songList[ j ].substr( songStart ) )
+								{
+									found = true;
+									break;
+								}
 							}
 						}
 
