@@ -19,6 +19,10 @@ Music
 2. Change order of albums to suit
 3. Run Playlist to generate playlists
 
+# Convert FLAC to MP3
+
+flactomp3.bat (requires FFmpeg, tested with 4.2.1) will take the Music folder and convert all FLAC files to MP3 and put them into a folder called MusicMP3
+
 # Gotchas
 
 - Removes duplicate songs from playlist (caused by greatest hits type compilations)

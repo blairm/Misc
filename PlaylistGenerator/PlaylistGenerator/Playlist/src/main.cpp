@@ -16,6 +16,9 @@ USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <vector>
 
 
+#define ARRAY_COUNT( array ) sizeof( ( array ) ) / sizeof( ( array )[ 0 ] )
+
+
 char tagIgnoreDuplicates				= '*';
 char tagIgnoreAlbum						= '-';
 
@@ -23,6 +26,8 @@ std::string TOPLEVEL_FOLDER				= "..\\..\\..\\";
 std::string MUSIC_FOLDER				= TOPLEVEL_FOLDER + "Music\\";
 std::string PLAYLIST_FOLDER				= TOPLEVEL_FOLDER + "Playlists\\";
 std::string PLAYLIST_TO_MUSIC_FOLDER	= "..\\Music\\";
+
+std::string SUPPORTED_FILE_FORMATS[]	= { "flac", "mp3", "wav" };
 
 char toLower( char param )
 {
@@ -189,7 +194,7 @@ int main( int argc, char** argv )
 				}
 
 				WIN32_FIND_DATA songFindData;
-				HANDLE songHandle = FindFirstFile( ( MUSIC_FOLDER + artistList[ i ] + "\\" + albumName + "\\*.mp3" ).c_str(), &songFindData );
+				HANDLE songHandle = FindFirstFile( ( MUSIC_FOLDER + artistList[ i ] + "\\" + albumName + "\\*.*" ).c_str(), &songFindData );
 				if( songHandle != INVALID_HANDLE_VALUE )
 				{
 					std::vector< std::string > albumSongList;
@@ -199,22 +204,36 @@ int main( int argc, char** argv )
 						std::string songName = songFindData.cFileName;
 						std::size_t songStart = songName.find(" ") + 1;
 
-						bool found = false;
+						bool isSupportedFile = false;
 
-						if( !includeDuplicates )
+						for( int j = 0; j < ARRAY_COUNT( SUPPORTED_FILE_FORMATS ); ++j )
 						{
-							for( int j = 0; j < songList.size(); ++j )
+							if( songName.find( "." + SUPPORTED_FILE_FORMATS[ j ] ) != std::string::npos )
 							{
-								if( songName.substr( songStart ) == songList[ j ].substr( songStart ) )
-								{
-									found = true;
-									break;
-								}
+								isSupportedFile = true;
+								break;
 							}
 						}
 
-						if(!found)
-							albumSongList.push_back( songName );
+						if( isSupportedFile )
+						{
+							bool found = false;
+
+							if( !includeDuplicates )
+							{
+								for( int j = 0; j < songList.size(); ++j )
+								{
+									if( songName.substr( songStart ) == songList[ j ].substr( songStart ) )
+									{
+										found = true;
+										break;
+									}
+								}
+							}
+
+							if(!found)
+								albumSongList.push_back( songName );
+						}
 					}
 					while( FindNextFile( songHandle, &songFindData ) );
 

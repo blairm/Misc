@@ -1,8 +1,6 @@
 @echo off
 
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" x64
-
-set path=%CD%\misc;%path%
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall" x64
 
 start /b "sublime" "C:\Program Files\Sublime Text 3\sublime_text.exe" --project AlbumList.sublime-project -n
 
