@@ -1,0 +1,13 @@
+ASP.Net/webservice/webservice/Properties/PublishProfiles/
+ASP.Net/webservicecaller/Library
+ASP.Net/webservicecaller/webservicecaller.CSharp.csproj
+ASP.Net/webservicecaller/webservicecaller.sln
+ASP.Net/webservice/packages
+ASP.Net/webservice/webservice/bin
+ASP.Net/webservice/webservice/obj
+WCF/webservice/Properties/PublishProfiles/
+WCF/webservicecaller/Library
+WCF/webservicecaller/webservicecaller.sln
+WCF/webservicecaller/webservicecaller.CSharp.csproj
+WCF/webservice/bin
+WCF/webservice/obj

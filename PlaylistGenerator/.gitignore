@@ -1,0 +1,6 @@
+Music/*
+MusicMP3/*
+Playlists/*
+PlaylistGenerator/AlbumList/build
+PlaylistGenerator/Playlist/build
+ffmpeg.exe
