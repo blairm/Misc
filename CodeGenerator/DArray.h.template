@@ -1,0 +1,98 @@
+#TEMPLATETYPES{ s32, f32, s8 }
+
+
+#TEMPLATEHEADER
+
+#ifndef DARRAY_H
+#define DARRAY_H
+
+
+#include "Types.h"
+#include "Utils.h"
+
+
+#TEMPLATEBODY
+
+struct DArray_<T>
+{
+    u32 count;
+    u32 allocatedCount;
+    <T>* base;
+
+    <T>& operator []( u32 index )
+    {
+        ASSERT( index < count );
+        <T>& result = base[ index ];
+        return result;
+    }
+};
+
+
+namespace DArrayHelper
+{
+    extern DArray_<T> Create_<T>();
+    extern DArray_<T> Create_<T>( u32 count );
+    extern void Free( DArray_<T>* array );
+
+    extern bool Push( DArray_<T>* array, <T> value );
+    extern <T> Pop( DArray_<T>* array );
+
+    #ifdef DARRAY_HELPER_FUNCTIONS
+        DArray_<T> Create_<T>()
+        {
+            return Create_<T>( 0 );
+        }
+
+        DArray_<T> Create_<T>( u32 count )
+        {
+            u32 allocatedCount = MAX( count, 16 );
+            DArray_<T> result = { count,
+                                    allocatedCount,
+                                    NEW( <T>, allocatedCount ) };
+            return result;
+        }
+
+        void Free( DArray_<T>* array )
+        {
+            FREE( array->base );
+            *array = {};
+        }
+
+
+        bool Push( DArray_<T>* array, <T> value )
+        {
+            bool result = true;
+
+            if( array->count == array->allocatedCount )
+            {
+                array->allocatedCount *= 2;
+                <T>* newBase = RENEW( <T>, array->base, array->allocatedCount );
+
+                if( newBase )
+                    array->base = newBase;
+                else
+                    result = false;
+            }
+
+            if( result )
+            {
+                array->base[ array->count ] = value;
+                ++array->count;
+            }
+
+            return result;
+        }
+
+        <T> Pop( DArray_<T>* array )
+        {
+            --array->count;
+            <T> result = array->base[ array->count ];
+            return result;
+        }
+    #endif
+}
+
+
+#TEMPLATEFOOTER
+
+#endif
