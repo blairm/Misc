@@ -50,12 +50,14 @@ class InfoPoint:
                     altitude:float = 0,
                     distance:float = 0,
                     accuracy:float = 0,
+                    speed:float = 0,
                     time:float = 0 ):
         self.east:float = east
         self.north:float = north
         self.altitude:float = altitude
         self.distance:float = distance
         self.accuracy:float = accuracy
+        self.speed:float = speed
         self.time:float = time
 
 
@@ -167,6 +169,7 @@ infoPoint:InfoPoint = [ InfoPoint( prevPoint.east,
                                     prevPoint.altitude,
                                     0,
                                     prevPoint.accuracy,
+                                    prevPoint.speed,
                                     prevPoint.time ) ]
 
 for i in range( 1, len( myTracksPoint ) ):
@@ -179,6 +182,7 @@ for i in range( 1, len( myTracksPoint ) ):
                                         point.altitude,
                                         distance_m_to_km( testDist ) + infoPoint[ -1 ].distance,
                                         point.accuracy,
+                                        point.speed,
                                         point.time ) )
         prevPoint = point
 
@@ -216,7 +220,7 @@ infoSheet = workbook.create_sheet( "Info" )
 infoSheet.cell( 1, 1, "Total Distance (km)" )
 set_numeric_cell( infoSheet, 1, 2,  infoPoint[ -1 ].distance, "0.00" )
 infoSheet.cell( 2, 1, "Total Time" )
-set_numeric_cell( infoSheet, 2, 2,  "=INDEX( $E$6:$E$65535, COUNT( $E$6:$E$65535 ) )", "[h]:mm:ss" )
+set_numeric_cell( infoSheet, 2, 2,  "=INDEX( $F$7:$F$65535, COUNT( $F$7:$F$65535 ) )", "[h]:mm:ss" )
 infoSheet.cell( 3, 1, "Average Speed (kph)" )
 set_numeric_cell( infoSheet, 3, 2,  speed_ms_to_kph( distance_km_to_m( infoPoint[ -1 ].distance ) / myTracksPoint[ -1 ].time ), "0.00" )
 
@@ -226,21 +230,27 @@ endIndex:int = 100
 infoSheet.cell( 1, 4, "Start" )
 infoSheet.cell( 1, 5, 0 )
 infoSheet.cell( 2, 4, "Map" )
-set_numeric_cell( infoSheet, 2, 5, f"=INDEX( $A$6:$A$65535, 1 + ROUND( ( COUNT( $A$6:$A$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
-set_numeric_cell( infoSheet, 2, 6, f"=INDEX( $B$6:$B$65535, 1 + ROUND( ( COUNT( $B$6:$B$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 2, 5, f"=INDEX( $A$7:$A$65535, 1 + ROUND( ( COUNT( $A$7:$A$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 2, 6, f"=INDEX( $B$7:$B$65535, 1 + ROUND( ( COUNT( $B$7:$B$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
 infoSheet.cell( 3, 4, "Altitude" )
-set_numeric_cell( infoSheet, 3, 5, f"=INDEX( $D$6:$D$65535, 1 + ROUND( ( COUNT( $D$6:$D$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
-set_numeric_cell( infoSheet, 3, 6, f"=INDEX( $C$6:$C$65535, 1 + ROUND( ( COUNT( $C$6:$C$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 3, 5, f"=INDEX( $D$7:$D$65535, 1 + ROUND( ( COUNT( $D$7:$D$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 3, 6, f"=INDEX( $C$7:$C$65535, 1 + ROUND( ( COUNT( $C$7:$C$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
+infoSheet.cell( 4, 4, "Speed" )
+set_numeric_cell( infoSheet, 4, 5, f"=INDEX( $D$7:$D$65535, 1 + ROUND( ( COUNT( $D$7:$D$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 4, 6, f"=INDEX( $E$7:$E$65535, 1 + ROUND( ( COUNT( $E$7:$E$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "0.00" )
 
 #end marker data
 infoSheet.cell( 1, 7, "End" )
 infoSheet.cell( 1, 8, endIndex )
 infoSheet.cell( 2, 7, "Map" )
-set_numeric_cell( infoSheet, 2, 8, f"=INDEX( $A$6:$A$65535, 1 + ROUND( ( COUNT( $A$6:$A$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
-set_numeric_cell( infoSheet, 2, 9, f"=INDEX( $B$6:$B$65535, 1 + ROUND( ( COUNT( $B$6:$B$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 2, 8, f"=INDEX( $A$7:$A$65535, 1 + ROUND( ( COUNT( $A$7:$A$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 2, 9, f"=INDEX( $B$7:$B$65535, 1 + ROUND( ( COUNT( $B$7:$B$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
 infoSheet.cell( 3, 7, "Altitude" )
-set_numeric_cell( infoSheet, 3, 8, f"=INDEX( $D$6:$D$65535, 1 + ROUND( ( COUNT( $D$6:$D$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
-set_numeric_cell( infoSheet, 3, 9, f"=INDEX( $C$6:$C$65535, 1 + ROUND( ( COUNT( $C$6:$C$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 3, 8, f"=INDEX( $D$7:$D$65535, 1 + ROUND( ( COUNT( $D$7:$D$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 3, 9, f"=INDEX( $C$7:$C$65535, 1 + ROUND( ( COUNT( $C$7:$C$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
+infoSheet.cell( 4, 7, "Speed" )
+set_numeric_cell( infoSheet, 4, 8, f"=INDEX( $D$7:$D$65535, 1 + ROUND( ( COUNT( $D$7:$D$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
+set_numeric_cell( infoSheet, 4, 9, f"=INDEX( $E$7:$E$65535, 1 + ROUND( ( COUNT( $E$7:$E$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) )", "0.00" )
 
 
 #selected map data
@@ -254,7 +264,7 @@ infoSheet.cell( 1, 13, "Gradient" )
 set_numeric_cell( infoSheet, 2, 13, "=L2 / ( K2 * 1000 )", "0.00%" )
 
 infoSheet.cell( 1, 14, "Time" )
-set_numeric_cell( infoSheet, 2, 14, f"=INDEX( $E$6:$E$65535, 1 + ROUND( ( COUNT( $E$6:$E$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) ) - INDEX( $E$6:$E$65535, 1 + ROUND( ( COUNT( $E$6:$E$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "[h]:mm:ss" )
+set_numeric_cell( infoSheet, 2, 14, f"=INDEX( $F$7:$F$65535, 1 + ROUND( ( COUNT( $F$7:$F$65535 ) - 1 ) * ( $H$1 / {endIndex} ) ) ) - INDEX( $F$7:$F$65535, 1 + ROUND( ( COUNT( $F$7:$F$65535 ) - 1 ) * ( $E$1 / {endIndex} ) ) )", "[h]:mm:ss" )
 
 infoSheet.cell( 1, 15, "Speed (kph)" )
 set_numeric_cell( infoSheet, 2, 15, "=K2 / ( HOUR( N2 ) + ( MINUTE( N2 ) / 60 ) + ( SECOND( N2 ) / 3600 ) )", "0.00" )
@@ -293,13 +303,16 @@ infoSheet.cell( 1, 24, "W/Kg" )
 set_numeric_cell( infoSheet, 2, 24, "=W2 / P2", "0.00" )
 
 
-set_cell_row( infoSheet, 5, 1, [ "East (m)", "North (m)", "Altitude (m)", "Distance (km)", "Time" ] )
+startRow:int = 7
+
+set_cell_row( infoSheet, startRow - 1, 1, [ "East (m)", "North (m)", "Altitude (m)", "Distance (km)", "Speed (kph)", "Time" ] )
 for i in range( 0, len( infoPoint ) ):
-    set_numeric_cell( infoSheet, i + 6, 1, infoPoint[ i ].east, "0.00" )
-    set_numeric_cell( infoSheet, i + 6, 2, infoPoint[ i ].north, "0.00" )
-    set_numeric_cell( infoSheet, i + 6, 3, infoPoint[ i ].altitude, "0.00" )
-    set_numeric_cell( infoSheet, i + 6, 4, infoPoint[ i ].distance, "0.00" )
-    set_numeric_cell( infoSheet, i + 6, 5, f"=TIME( 0, 0, {float( infoPoint[ i ].time )} )", "[h]:mm:ss" )
+    set_numeric_cell( infoSheet, i + startRow, 1, infoPoint[ i ].east, "0.00" )
+    set_numeric_cell( infoSheet, i + startRow, 2, infoPoint[ i ].north, "0.00" )
+    set_numeric_cell( infoSheet, i + startRow, 3, infoPoint[ i ].altitude, "0.00" )
+    set_numeric_cell( infoSheet, i + startRow, 4, infoPoint[ i ].distance, "0.00" )
+    set_numeric_cell( infoSheet, i + startRow, 5, infoPoint[ i ].speed, "0.00" )
+    set_numeric_cell( infoSheet, i + startRow, 6, f"=TIME( 0, 0, {float( infoPoint[ i ].time )} )", "[h]:mm:ss" )
 
 
 mapChart = ScatterChart()
@@ -314,8 +327,8 @@ mapChart.y_axis.scaling.min = northBounds[ 0 ]
 mapChart.y_axis.scaling.max = northBounds[ 1 ]
 mapChart.width = mapChart.height * ( ( eastBounds[ 1 ] - eastBounds[ 0 ] ) / ( northBounds[ 1 ] - northBounds[ 0 ] ) )
 
-mapValuesX = Reference( infoSheet, min_col = 1, min_row = 6, max_col = 1, max_row = len( infoPoint ) + 6 )
-mapValuesY = Reference( infoSheet, min_col = 2, min_row = 6, max_col = 2, max_row = len( infoPoint ) + 6 )
+mapValuesX = Reference( infoSheet, min_col = 1, min_row = startRow, max_col = 1, max_row = len( infoPoint ) + startRow )
+mapValuesY = Reference( infoSheet, min_col = 2, min_row = startRow, max_col = 2, max_row = len( infoPoint ) + startRow )
 mapSeries = Series( mapValuesY, mapValuesX )
 mapSeries.title = openpyxl.chart.series.SeriesLabel( openpyxl.chart.data_source.StrRef( "'Info'!D2" ) )
 mapSeries.smooth = False;
@@ -326,7 +339,30 @@ mapChart.series.append( mapSeries )
 add_marker( mapChart, infoSheet, 2, 5, 2, 6, "'Info'!D1", "00A933" )
 add_marker( mapChart, infoSheet, 2, 8, 2, 9, "'Info'!G1", "BE4B48" )
 
-infoSheet.add_chart( mapChart, "G6" )
+infoSheet.add_chart( mapChart, "H8" )
+
+
+speedChart = ScatterChart()
+speedChart.legend = None
+speedChart.x_axis.title = "Distance (Km)"
+speedChart.x_axis.majorGridlines = None
+speedChart.x_axis.scaling.min = 0
+speedChart.x_axis.scaling.max = infoPoint[ -1 ].distance
+speedChart.y_axis.title = "Speed (Kph)"
+speedChart.y_axis.majorGridlines = None
+
+speedValuesX = Reference( infoSheet, min_col = 4, min_row = startRow, max_col = 4, max_row = len( infoPoint ) + startRow )
+speedValuesY = Reference( infoSheet, min_col = 5, min_row = startRow, max_col = 5, max_row = len( infoPoint ) + startRow )
+speedSeries = Series( speedValuesY, speedValuesX )
+speedSeries.smooth = False;
+speedSeries.graphicalProperties.line.width = 0
+speedSeries.graphicalProperties.line.solidFill = "2A6099"
+speedChart.series.append( speedSeries )
+
+add_marker( speedChart, infoSheet, 4, 5, 4, 6, "'Info'!D1", "00A933" )
+add_marker( speedChart, infoSheet, 4, 8, 4, 9, "'Info'!G1", "BE4B48" )
+
+infoSheet.add_chart( speedChart, "R8" )
 
 
 altitudeChart = ScatterChart()
@@ -338,10 +374,9 @@ altitudeChart.x_axis.scaling.max = infoPoint[ -1 ].distance
 altitudeChart.y_axis.title = "Altitude (m)"
 altitudeChart.y_axis.majorGridlines = None
 
-altitudeValuesX = Reference( infoSheet, min_col = 4, min_row = 6, max_col = 4, max_row = len( infoPoint ) + 6 )
-altitudeValuesY = Reference( infoSheet, min_col = 3, min_row = 6, max_col = 3, max_row = len( infoPoint ) + 6 )
+altitudeValuesX = Reference( infoSheet, min_col = 4, min_row = startRow, max_col = 4, max_row = len( infoPoint ) + startRow )
+altitudeValuesY = Reference( infoSheet, min_col = 3, min_row = startRow, max_col = 3, max_row = len( infoPoint ) + startRow )
 altitudeSeries = Series( altitudeValuesY, altitudeValuesX )
-mapSeries.title = openpyxl.chart.series.SeriesLabel( openpyxl.chart.data_source.StrRef( "'Info'!D2" ) )
 altitudeSeries.smooth = False;
 altitudeSeries.graphicalProperties.line.width = 0
 altitudeSeries.graphicalProperties.line.solidFill = "2A6099"
@@ -350,7 +385,7 @@ altitudeChart.series.append( altitudeSeries )
 add_marker( altitudeChart, infoSheet, 3, 5, 3, 6, "'Info'!D1", "00A933" )
 add_marker( altitudeChart, infoSheet, 3, 8, 3, 9, "'Info'!G1", "BE4B48" )
 
-infoSheet.add_chart( altitudeChart, "G22" )
+infoSheet.add_chart( altitudeChart, "H24" )
 
 
 workbook.save( f"{filename}.xlsx" )
