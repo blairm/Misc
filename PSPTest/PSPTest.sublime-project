@@ -1,0 +1,12 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		},
+        {
+            "path": "../pspdev/psp/sdk/include",
+            "name": "pspsdk"
+        }
+	]
+}
